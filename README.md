@@ -22,6 +22,20 @@ The README is updated to
 
 Good use: run this tool on `push` to `master` branch using [GitHub Action](https://glebbahmutov.com/blog/trying-github-actions/), then push updated code (if any) back to the repository. See [.github/workflows/demo.yml](.github/workflows/demo.yml).
 
+You can pass multiple names at once
+
+```shell
+npx update-badge prettier debug ...
+```
+
+## Debugging
+
+Run with environment variable `DEBUG=dependency-version-badge` to see verbose logs
+
+## License
+
+MIT license
+
 [demo image]: https://github.com/bahmutov/dependency-version-badge/workflows/Demo/badge.svg?branch=master
 [demo url]: https://github.com/bahmutov/dependency-version-badge/actions
 [ci image]: https://github.com/bahmutov/dependency-version-badge/workflows/ci/badge.svg?branch=master

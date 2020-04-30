@@ -26,7 +26,7 @@ jobs:
 
       - name: Update version badges 🏷
         run: |
-          ./bin/update-badge.js prettier
+          DEBUG=dependency-version-badge ./bin/update-badge.js prettier debug
 
       # commit any changed files
       # https://github.com/mikeal/publish-to-github-action
