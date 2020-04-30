@@ -12,6 +12,8 @@ Can be updated by installing this module and running:
 $ npm i -D dependency-version-badge
 $ npx update-badge prettier
 saving updated readme with prettier@2.0.5
+# alternative without dev dependency
+$ npx -p dependency-version-badge update-badge prettier
 ```
 
 The README is updated to

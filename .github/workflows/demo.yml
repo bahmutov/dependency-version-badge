@@ -19,8 +19,10 @@ jobs:
 
       # this demo is self-contained
       # but your project probably needs to install dependencies
+      # alternatively, if you just want to run the badge update
+      #   npx -p dependency-version-badge update-badge <name of dependency>
       - name: Install NPM dependencies 📦
-        uses: bahmutov/npm-install@v1
+      uses: bahmutov/npm-install@v1
 
       - name: Update version badges 🏷
         run: |
