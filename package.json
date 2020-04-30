@@ -1,6 +1,6 @@
 {
   "name": "dependency-version-badge",
-  "version": "1.0.0",
+  "version": "0.0.0-development",
   "description": "A little script to update README file with dependency version badge",
   "bin": {
     "update-badge": "bin/update-badge.js"
@@ -9,11 +9,12 @@
     "bin"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "semantic-release": "semantic-release"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bahmutov/dependency-version-badge.git"
+    "url": "https://github.com/bahmutov/dependency-version-badge.git"
   },
   "keywords": [
     "dependencies",
@@ -27,6 +28,7 @@
   },
   "homepage": "https://github.com/bahmutov/dependency-version-badge#readme",
   "devDependencies": {
-    "prettier": "2.0.5"
+    "prettier": "2.0.5",
+    "semantic-release": "^17.0.7"
   }
 }
