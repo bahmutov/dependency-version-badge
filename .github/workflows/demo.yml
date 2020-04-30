@@ -16,6 +16,12 @@ jobs:
     steps:
       - name: Checkout 🛎
         uses: actions/checkout@v1
+
+      # this demo is self-contained
+      # but your project probably needs to install dependencies
+      - name: Install NPM dependencies 📦
+        uses: bahmutov/npm-install@v1
+
       - name: Update version badges 🏷
         run: |
           ./bin/update-badge.js prettier
