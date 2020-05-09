@@ -2,6 +2,45 @@
 const debug = require('debug')('dependency-version-badge')
 const path = require('path')
 const fs = require('fs')
+const os = require('os')
+
+function escapeName(name) {
+  // for shields.io need to change each '-' into '--'
+  return name.replace(/-/g, '--')
+}
+
+function replaceVersionShield(readmeText, name, newVersion) {
+  const escapedName = escapeName(name)
+  const badgeVersionRe = new RegExp(
+    'https://img\\.shields\\.io/badge/' +
+      escapedName +
+      '-(\\d+\\.\\d+\\.\\d+)-brightgreen',
+  )
+  const badgeUrl = `https://img.shields.io/badge/${escapedName}-${newVersion}-brightgreen`
+  debug('new badge contents "%s"', badgeUrl)
+  let found
+
+  let updatedReadmeText = readmeText.replace(badgeVersionRe, (match) => {
+    found = true
+    return badgeUrl
+  })
+
+  if (!found) {
+    console.log('⚠️ Could not find version badge for dependency "%s"', name)
+    console.log('Insert new badge on the first line')
+    const badge = `![${name} version](${badgeUrl})`
+    debug('inserting new badge: %s', badge)
+
+    const lines = readmeText.split(os.EOL)
+    if (lines.length < 1) {
+      console.error('README file has no lines, cannot insert version badge')
+      return readmeText
+    }
+    lines[0] += ' ' + badge
+    updatedReadmeText = lines.join(os.EOL)
+  }
+  return updatedReadmeText
+}
 
 function updateBadge(name) {
   debug('updating badge "%s"', name)
@@ -22,30 +61,11 @@ function updateBadge(name) {
   const readmeFilename = path.join(process.cwd(), 'README.md')
   const readmeText = fs.readFileSync(readmeFilename, 'utf8')
 
-  function escapeName(name) {
-    // for shields.io need to change each '-' into '--'
-    return name.replace(/-/g, '--')
-  }
-
-  function replaceVersionShield(name, newVersion) {
-    const escapedName = escapeName(name)
-    const cypressVersionRe = new RegExp(
-      'https://img\\.shields\\.io/badge/' +
-        escapedName +
-        '-(\\d+\\.\\d+\\.\\d+)-brightgreen',
-    )
-    const cypressNewVersion = `https://img.shields.io/badge/${escapedName}-${newVersion}-brightgreen`
-    debug('new badge contents "%s"', cypressNewVersion)
-
-    const updatedReadmeText = readmeText.replace(
-      cypressVersionRe,
-      cypressNewVersion,
-    )
-    return updatedReadmeText
-  }
-
-  // replaceVersionShield('cypress', '4.5.1')
-  const maybeChangedText = replaceVersionShield(name, currentVersion)
+  const maybeChangedText = replaceVersionShield(
+    readmeText,
+    name,
+    currentVersion,
+  )
   if (maybeChangedText !== readmeText) {
     console.log('saving updated readme with %s@%s', name, currentVersion)
     fs.writeFileSync(readmeFilename, maybeChangedText, 'utf8')
