@@ -1,6 +1,6 @@
 name: Demo
 # update README badge only if the README file changes
-# or if the package.json file changes
+# or if the package.json file changes, or this file changes
 on:
   push:
     branches:
@@ -8,6 +8,7 @@ on:
     paths:
       - README.md
       - package.json
+      - .github/workflows/demo.yml
 
 jobs:
   build:

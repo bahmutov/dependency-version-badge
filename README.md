@@ -30,6 +30,10 @@ npx update-badge prettier debug ...
 
 If a badge is not found, a new badge will be inserted on the first line of the README file
 
+## Examples
+
+[cypress-svelte-unit-test](https://github.com/bahmutov/cypress-svelte-unit-test), [cy-rollup](https://github.com/bahmutov/cy-rollup)
+
 ## Debugging
 
 Run with environment variable `DEBUG=dependency-version-badge` to see verbose logs
