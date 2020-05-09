@@ -1,4 +1,4 @@
-# dependency-version-badge ![prettier version](https://img.shields.io/badge/prettier-2.0.5-brightgreen) [![demo CI][demo image]][demo url] [![CI][ci image]][ci url]
+# dependency-version-badge ![prettier version](https://img.shields.io/badge/prettier-2.0.5-brightgreen) [![demo CI][demo image]][demo url] [![CI][ci image]][ci url] ![debug version](https://img.shields.io/badge/debug-4.1.1-brightgreen)
 
 > A little script to update README file with dependency version badge
 
