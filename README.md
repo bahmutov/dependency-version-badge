@@ -32,7 +32,7 @@ If a badge is not found, a new badge will be inserted on the first line of the R
 
 ## Examples
 
-[cypress-svelte-unit-test](https://github.com/bahmutov/cypress-svelte-unit-test)
+[cypress-svelte-unit-test](https://github.com/bahmutov/cypress-svelte-unit-test), [cy-rollup](https://github.com/bahmutov/cy-rollup)
 
 ## Debugging
 
