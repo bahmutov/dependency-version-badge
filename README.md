@@ -28,6 +28,8 @@ You can pass multiple names at once
 npx update-badge prettier debug ...
 ```
 
+If a badge is not found, a new badge will be inserted on the first line of the README file
+
 ## Debugging
 
 Run with environment variable `DEBUG=dependency-version-badge` to see verbose logs
