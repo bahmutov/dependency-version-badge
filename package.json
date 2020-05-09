@@ -6,7 +6,8 @@
     "update-badge": "bin/update-badge.js"
   },
   "files": [
-    "bin"
+    "bin",
+    "src"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
