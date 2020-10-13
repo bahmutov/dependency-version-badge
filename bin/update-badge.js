@@ -10,11 +10,12 @@ const args = arg({
 })
 debug('args: %o', args)
 
-if (process.argv.length < 3) {
+const names = args._
+debug('names to process: %o', names)
+
+if (names.length < 1) {
   console.error('Usage: update-version <package name> <package name2> ...')
   process.exit(1)
 }
 
-const names = process.argv.slice(2)
-debug('names to process: %o', names)
 names.forEach(updateBadge)
