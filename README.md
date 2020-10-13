@@ -59,6 +59,17 @@ Badge | Example repo
 ![dependency-version-badge used in cy-rollup version](https://img.shields.io/badge/dependency--version--badge-1.2.0-brightgreen) | [cy-rollup](https://github.com/bahmutov/cy-rollup)
 <!-- prettier-ignore-end -->
 
+**Tip:** you can set a GitHub workflow to run using a schedule to update those badges periodically. For example, to update the badges every night:
+
+```yml
+on:
+  schedule:
+    # update badges every night
+    # because we have a few badges that are linked
+    # to the external repositories
+    - cron: '0 3 * * *'
+```
+
 ## Debugging
 
 Run with environment variable `DEBUG=dependency-version-badge` to see verbose logs
