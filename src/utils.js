@@ -14,15 +14,16 @@ function escapeName(name) {
  * Replaces the whole Markdown image badge with new version badge.
  * The badge is formed like "![name version](url...escaped name-version)"
  */
-function replaceVersionShield(readmeText, name, newVersion) {
+function replaceVersionShield(readmeText, name, newVersion, usedIn) {
   const escapedName = escapeName(name)
+  const label = usedIn ? `${name} used in ${usedIn} version` : `${name} version`
   const badgeVersionRe = new RegExp(
-    `\\!\\[${name} version\\]` +
+    `\\!\\[${label}\\]` +
       '\\(https://img\\.shields\\.io/badge/' +
       escapedName +
       '-(\\d+\\.\\d+\\.\\d+)-brightgreen\\)',
   )
-  const badgeUrl = `![${name} version](https://img.shields.io/badge/${escapedName}-${newVersion}-brightgreen)`
+  const badgeUrl = `![${label}](https://img.shields.io/badge/${escapedName}-${newVersion}-brightgreen)`
   debug('new badge contents "%s"', badgeUrl)
   let found
 

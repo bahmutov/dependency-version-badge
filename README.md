@@ -46,6 +46,10 @@ npx update-badge dependency-version-badge --from https://github.com/bahmutov/cyp
 
 Will update the badge below
 
+```
+![dependency-version-badge used in cypress-svelte-unit-test version](... badge url ...)
+```
+
 ## Debugging
 
 Run with environment variable `DEBUG=dependency-version-badge` to see verbose logs

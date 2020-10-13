@@ -39,3 +39,27 @@ test('replacing dependency badge for longer name', (t) => {
   `
   t.is(replaced, expected)
 })
+
+test('replacing dependency badge used by another repo', (t) => {
+  const markdown = `
+    this is readme markdown
+
+    ![my-library used in my-library-example version](https://img.shields.io/badge/my--library-1.2.3-brightgreen)
+
+    some other text
+  `
+  const replaced = replaceVersionShield(
+    markdown,
+    'my-library',
+    '4.5.6',
+    'my-library-example',
+  )
+  const expected = `
+    this is readme markdown
+
+    ![my-library used in my-library-example version](https://img.shields.io/badge/my--library-4.5.6-brightgreen)
+
+    some other text
+  `
+  t.is(replaced, expected)
+})

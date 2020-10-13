@@ -10,6 +10,9 @@ jobs:
       - name: Install NPM dependencies 📦
         uses: bahmutov/npm-install@v1
 
+      - name: Tests 🧪
+        run: npm test
+
       - name: Run update 📊
         run: bin/update-badge.js prettier
 
