@@ -3,6 +3,7 @@
 
 const arg = require('arg')
 const debug = require('debug')('dependency-version-badge')
+const pEachSeries = require('p-each-series')
 const { updateBadge } = require('../src/utils')
 
 const args = arg({
@@ -18,4 +19,9 @@ if (names.length < 1) {
   process.exit(1)
 }
 
-names.forEach(updateBadge)
+pEachSeries(names, (name) => {
+  return updateBadge({ name, from: args['--from'] })
+}).catch((err) => {
+  console.error(err.message)
+  process.exit(1)
+})

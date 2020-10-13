@@ -42,7 +42,11 @@ function replaceVersionShield(readmeText, name, newVersion) {
   return updatedReadmeText
 }
 
-function updateBadge(name) {
+/**
+ * Updates the given badge (if found) with new version information
+ * read from the "package.json" file. Returns a promise
+ */
+function updateBadge({ name, from }) {
   debug('updating badge "%s"', name)
   const pkgFilename = path.join(process.cwd(), 'package.json')
   const pkg = require(pkgFilename)
@@ -53,8 +57,9 @@ function updateBadge(name) {
   )
   const currentVersion = allDependencies[name]
   if (!currentVersion) {
-    console.error('Could not find dependency %s among dependencies', name)
-    process.exit(1)
+    const message = `Could not find dependency "${name}" among dependencies`
+    debug(message)
+    return Promise.reject(new Error(message))
   }
   debug('current dependency version %s@%s', name, currentVersion)
 
@@ -72,6 +77,8 @@ function updateBadge(name) {
   } else {
     debug('no updates for dependency %s', name)
   }
+
+  return Promise.resolve()
 }
 
 module.exports = {
