@@ -25,6 +25,13 @@ jobs:
         run: |
           DEBUG=dependency-version-badge ./bin/update-badge.js prettier debug
 
+      - name: Update version badges from example repos 💎
+        run: |
+          DEBUG=dependency-version-badge ./bin/update-badge.js \
+            --from https://github.com/bahmutov/cy-rollup
+          DEBUG=dependency-version-badge ./bin/update-badge.js \
+            --from https://github.com/bahmutov/cypress-svelte-unit-test
+
       # commit any changed files
       # https://github.com/mikeal/publish-to-github-action
       - name: Push any changes to repo 📤

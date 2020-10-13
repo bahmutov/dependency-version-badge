@@ -3,32 +3,38 @@ const debug = require('debug')('dependency-version-badge')
 const path = require('path')
 const fs = require('fs')
 const os = require('os')
+const getPackageFromGitHub = require('get-package-json-from-github')
 
 function escapeName(name) {
   // for shields.io need to change each '-' into '--'
   return name.replace(/-/g, '--')
 }
 
-function replaceVersionShield(readmeText, name, newVersion) {
+/**
+ * Replaces the whole Markdown image badge with new version badge.
+ * The badge is formed like "![name version](url...escaped name-version)"
+ */
+function replaceVersionShield(readmeText, name, newVersion, usedIn) {
   const escapedName = escapeName(name)
+  const label = usedIn ? `${name} used in ${usedIn} version` : `${name} version`
   const badgeVersionRe = new RegExp(
-    'https://img\\.shields\\.io/badge/' +
+    `\\!\\[${label}\\]` +
+      '\\(https://img\\.shields\\.io/badge/' +
       escapedName +
-      '-(\\d+\\.\\d+\\.\\d+)-brightgreen',
+      '-(\\d+\\.\\d+\\.\\d+)-brightgreen\\)',
   )
-  const badgeUrl = `https://img.shields.io/badge/${escapedName}-${newVersion}-brightgreen`
-  debug('new badge contents "%s"', badgeUrl)
+  const badge = `![${label}](https://img.shields.io/badge/${escapedName}-${newVersion}-brightgreen)`
+  debug('new badge contents "%s"', badge)
   let found
 
   let updatedReadmeText = readmeText.replace(badgeVersionRe, (match) => {
     found = true
-    return badgeUrl
+    return badge
   })
 
   if (!found) {
     console.log('⚠️ Could not find version badge for dependency "%s"', name)
     console.log('Insert new badge on the first line')
-    const badge = `![${name} version](${badgeUrl})`
     debug('inserting new badge: %s', badge)
 
     const lines = readmeText.split(os.EOL)
@@ -42,38 +48,85 @@ function replaceVersionShield(readmeText, name, newVersion) {
   return updatedReadmeText
 }
 
-function updateBadge(name) {
-  debug('updating badge "%s"', name)
-  const pkgFilename = path.join(process.cwd(), 'package.json')
-  const pkg = require(pkgFilename)
+function getAnyDependency(pkg, name) {
   const allDependencies = Object.assign(
     {},
     pkg.dependencies,
     pkg.devDependencies,
   )
-  const currentVersion = allDependencies[name]
-  if (!currentVersion) {
-    console.error('Could not find dependency %s among dependencies', name)
-    process.exit(1)
-  }
-  debug('current dependency version %s@%s', name, currentVersion)
+  return allDependencies[name]
+}
 
-  const readmeFilename = path.join(process.cwd(), 'README.md')
-  const readmeText = fs.readFileSync(readmeFilename, 'utf8')
+function findVersionFromPackageFile(name) {
+  debug('reading version of "%s" from package.json file', name)
+  const pkgFilename = path.join(process.cwd(), 'package.json')
+  const pkg = require(pkgFilename)
+  const currentVersion = getAnyDependency(pkg, name)
+  return currentVersion
+}
 
-  const maybeChangedText = replaceVersionShield(
-    readmeText,
-    name,
-    currentVersion,
-  )
-  if (maybeChangedText !== readmeText) {
-    console.log('saving updated readme with %s@%s', name, currentVersion)
-    fs.writeFileSync(readmeFilename, maybeChangedText, 'utf8')
-  } else {
-    debug('no updates for dependency %s', name)
+/**
+ *
+ */
+function findVersionFromGitHub(name, repoUrl) {
+  return getPackageFromGitHub(repoUrl).then((pkg) => {
+    return getAnyDependency(pkg, name)
+  })
+}
+
+function findVersionFrom(name, from) {
+  if (from) {
+    return findVersionFromGitHub(name, from)
   }
+  // assuming local package.json file
+  return Promise.resolve(findVersionFromPackageFile(name))
+}
+
+function parseGitHubRepo(maybeGitHubUrl) {
+  if (!maybeGitHubUrl) {
+    return
+  }
+
+  const parts = maybeGitHubUrl.split('/')
+  return parts[parts.length - 1]
+}
+
+/**
+ * Updates the given badge (if found) with new version information
+ * read from the "package.json" file. Returns a promise
+ */
+function updateBadge({ name, from }) {
+  debug('updating badge "%s"', name)
+
+  return findVersionFrom(name, from).then((currentVersion) => {
+    if (!currentVersion) {
+      const message = `Could not find dependency "${name}" among dependencies`
+      debug(message)
+      return Promise.reject(new Error(message))
+    }
+    debug('current dependency version %s@%s', name, currentVersion)
+
+    const readmeFilename = path.join(process.cwd(), 'README.md')
+    const readmeText = fs.readFileSync(readmeFilename, 'utf8')
+    const usedIn = parseGitHubRepo(from)
+
+    const maybeChangedText = replaceVersionShield(
+      readmeText,
+      name,
+      currentVersion,
+      usedIn,
+    )
+    if (maybeChangedText !== readmeText) {
+      console.log('saving updated readme with %s@%s', name, currentVersion)
+      fs.writeFileSync(readmeFilename, maybeChangedText, 'utf8')
+    } else {
+      debug('no updates for dependency %s', name)
+    }
+  })
 }
 
 module.exports = {
   updateBadge,
+  replaceVersionShield,
+  parseGitHubRepo,
 }
