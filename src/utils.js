@@ -111,4 +111,5 @@ function updateBadge({ name, from }) {
 
 module.exports = {
   updateBadge,
+  replaceVersionShield,
 }
