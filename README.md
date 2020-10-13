@@ -1,6 +1,8 @@
-# dependency-version-badge ![prettier version](https://img.shields.io/badge/prettier-2.0.5-brightgreen) [![demo CI][demo image]][demo url] [![CI][ci image]][ci url] ![debug version](https://img.shields.io/badge/debug-4.1.1-brightgreen)
+# dependency-version-badge [![demo CI][demo image]][demo url] [![CI][ci image]][ci url]
 
 > A little script to update README file with dependency version badge
+
+Badge examples ![prettier version](https://img.shields.io/badge/prettier-2.0.5-brightgreen) ![debug version](https://img.shields.io/badge/debug-4.1.1-brightgreen)
 
 Example badge (in this readme) for dev dependency `prettier` (showing incorrect version 4.0.1)
 
