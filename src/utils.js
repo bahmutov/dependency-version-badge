@@ -42,12 +42,8 @@ function replaceVersionShield(readmeText, name, newVersion) {
   return updatedReadmeText
 }
 
-/**
- * Updates the given badge (if found) with new version information
- * read from the "package.json" file. Returns a promise
- */
-function updateBadge({ name, from }) {
-  debug('updating badge "%s"', name)
+function findVersionFromPackageFile(name) {
+  debug('reading version of "%s" from package.json file', name)
   const pkgFilename = path.join(process.cwd(), 'package.json')
   const pkg = require(pkgFilename)
   const allDependencies = Object.assign(
@@ -56,29 +52,45 @@ function updateBadge({ name, from }) {
     pkg.devDependencies,
   )
   const currentVersion = allDependencies[name]
-  if (!currentVersion) {
-    const message = `Could not find dependency "${name}" among dependencies`
-    debug(message)
-    return Promise.reject(new Error(message))
+  return currentVersion
+}
+
+function findVersionFrom(name, from) {
+  if (!from) {
+    return Promise.resolve(findVersionFromPackageFile(name))
   }
-  debug('current dependency version %s@%s', name, currentVersion)
+}
 
-  const readmeFilename = path.join(process.cwd(), 'README.md')
-  const readmeText = fs.readFileSync(readmeFilename, 'utf8')
+/**
+ * Updates the given badge (if found) with new version information
+ * read from the "package.json" file. Returns a promise
+ */
+function updateBadge({ name, from }) {
+  debug('updating badge "%s"', name)
 
-  const maybeChangedText = replaceVersionShield(
-    readmeText,
-    name,
-    currentVersion,
-  )
-  if (maybeChangedText !== readmeText) {
-    console.log('saving updated readme with %s@%s', name, currentVersion)
-    fs.writeFileSync(readmeFilename, maybeChangedText, 'utf8')
-  } else {
-    debug('no updates for dependency %s', name)
-  }
+  return findVersionFrom(name, from).then((currentVersion) => {
+    if (!currentVersion) {
+      const message = `Could not find dependency "${name}" among dependencies`
+      debug(message)
+      return Promise.reject(new Error(message))
+    }
+    debug('current dependency version %s@%s', name, currentVersion)
 
-  return Promise.resolve()
+    const readmeFilename = path.join(process.cwd(), 'README.md')
+    const readmeText = fs.readFileSync(readmeFilename, 'utf8')
+
+    const maybeChangedText = replaceVersionShield(
+      readmeText,
+      name,
+      currentVersion,
+    )
+    if (maybeChangedText !== readmeText) {
+      console.log('saving updated readme with %s@%s', name, currentVersion)
+      fs.writeFileSync(readmeFilename, maybeChangedText, 'utf8')
+    } else {
+      debug('no updates for dependency %s', name)
+    }
+  })
 }
 
 module.exports = {
