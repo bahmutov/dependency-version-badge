@@ -1,6 +1,12 @@
 const test = require('ava')
 const debug = require('debug')('test')
-const { replaceVersionShield } = require('../src/utils')
+const { replaceVersionShield, parseGitHubRepo } = require('../src/utils')
+
+test('get name from github url', (t) => {
+  const url = 'https://github.com/bahmutov/dependency-version-badge'
+  const name = parseGitHubRepo(url)
+  t.is(name, 'dependency-version-badge')
+})
 
 test('replacing dependency badge', (t) => {
   const markdown = `
