@@ -3,6 +3,7 @@ const debug = require('debug')('dependency-version-badge')
 const path = require('path')
 const fs = require('fs')
 const os = require('os')
+const getPackageFromGitHub = require('get-package-json-from-github')
 
 function escapeName(name) {
   // for shields.io need to change each '-' into '--'
@@ -42,23 +43,38 @@ function replaceVersionShield(readmeText, name, newVersion) {
   return updatedReadmeText
 }
 
-function findVersionFromPackageFile(name) {
-  debug('reading version of "%s" from package.json file', name)
-  const pkgFilename = path.join(process.cwd(), 'package.json')
-  const pkg = require(pkgFilename)
+function getAnyDependency(pkg, name) {
   const allDependencies = Object.assign(
     {},
     pkg.dependencies,
     pkg.devDependencies,
   )
-  const currentVersion = allDependencies[name]
+  return allDependencies[name]
+}
+
+function findVersionFromPackageFile(name) {
+  debug('reading version of "%s" from package.json file', name)
+  const pkgFilename = path.join(process.cwd(), 'package.json')
+  const pkg = require(pkgFilename)
+  const currentVersion = getAnyDependency(pkg, name)
   return currentVersion
 }
 
+/**
+ *
+ */
+function findVersionFromGitHub(name, repoUrl) {
+  return getPackageFromGitHub(repoUrl).then((pkg) => {
+    return getAnyDependency(pkg, name)
+  })
+}
+
 function findVersionFrom(name, from) {
-  if (!from) {
-    return Promise.resolve(findVersionFromPackageFile(name))
+  if (from) {
+    return findVersionFromGitHub(name, from)
   }
+  // assuming local package.json file
+  return Promise.resolve(findVersionFromPackageFile(name))
 }
 
 /**

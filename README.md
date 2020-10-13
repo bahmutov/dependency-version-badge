@@ -36,6 +36,16 @@ If a badge is not found, a new badge will be inserted on the first line of the R
 
 [cypress-svelte-unit-test](https://github.com/bahmutov/cypress-svelte-unit-test), [cy-rollup](https://github.com/bahmutov/cy-rollup)
 
+## Versions in remote repositories
+
+You can look up dependency versions in `package.json` files in remote repositories
+
+```
+npx update-badge dependency-version-badge --from https://github.com/bahmutov/cypress-svelte-unit-test
+```
+
+Will update the badge below
+
 ## Debugging
 
 Run with environment variable `DEBUG=dependency-version-badge` to see verbose logs
