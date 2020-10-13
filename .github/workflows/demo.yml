@@ -25,12 +25,14 @@ jobs:
         run: |
           DEBUG=dependency-version-badge ./bin/update-badge.js prettier debug
 
+      # update the version of dependency-version-badge dependency
+      # currently used by bahmutov/cy-rollup and bahmutov/cypress-svelte-unit-test
       - name: Update version badges from example repos 💎
         run: |
           DEBUG=dependency-version-badge ./bin/update-badge.js \
-            --from https://github.com/bahmutov/cy-rollup
+            dependency-version-badge --from https://github.com/bahmutov/cy-rollup
           DEBUG=dependency-version-badge ./bin/update-badge.js \
-            --from https://github.com/bahmutov/cypress-svelte-unit-test
+            dependency-version-badge --from https://github.com/bahmutov/cypress-svelte-unit-test
 
       # commit any changed files
       # https://github.com/mikeal/publish-to-github-action
