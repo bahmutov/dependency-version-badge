@@ -92,11 +92,23 @@ function parseGitHubRepo(maybeGitHubUrl) {
 }
 
 /**
+ * @param {string} x
+ */
+function isGitHubRepoUrl(x) {
+  return x.startsWith('https://github.com')
+}
+
+/**
  * Updates the given badge (if found) with new version information
  * read from the "package.json" file. Returns a promise
  */
 function updateBadge({ name, from }) {
-  debug('updating badge "%s"', name)
+  debug('updating badge %o', { name, from })
+
+  if (from && !isGitHubRepoUrl(from)) {
+    from = `https://github.com/${from}`
+    debug('set --from to "%s"', from)
+  }
 
   return findVersionFrom(name, from).then((currentVersion) => {
     if (!currentVersion) {

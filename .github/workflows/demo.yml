@@ -37,7 +37,7 @@ jobs:
           DEBUG=dependency-version-badge ./bin/update-badge.js \
             dependency-version-badge --from https://github.com/bahmutov/cy-rollup
           DEBUG=dependency-version-badge ./bin/update-badge.js \
-            dependency-version-badge --from https://github.com/bahmutov/cypress-svelte-unit-test
+            dependency-version-badge --from bahmutov/cypress-svelte-unit-test
 
       # commit any changed files
       # https://github.com/mikeal/publish-to-github-action

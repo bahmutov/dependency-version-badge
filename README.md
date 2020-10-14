@@ -50,6 +50,12 @@ Will update the badge below
 ![dependency-version-badge used in cypress-svelte-unit-test version](... badge url ...)
 ```
 
+For GitHub urls, you can simply use `--from <organization name>/<repo name>` like this
+
+```
+npx update-badge dependency-version-badge --from bahmutov/cypress-svelte-unit-test
+```
+
 Examples table
 
 <!-- prettier-ignore-start -->
