@@ -70,6 +70,8 @@ on:
     - cron: '0 3 * * *'
 ```
 
+See example in [cypress-react-unit-test](https://github.com/bahmutov/cypress-react-unit-test#external-examples)
+
 ## Debugging
 
 Run with environment variable `DEBUG=dependency-version-badge` to see verbose logs
