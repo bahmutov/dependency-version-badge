@@ -99,6 +99,20 @@ function isGitHubRepoUrl(x) {
 }
 
 /**
+ * Normalizes the dependency version, removing special characters like "~" or "^"
+ * If the version is still fuzzy, like "*" returns null
+ * @param {string} version
+ */
+function cleanVersion(version) {
+  if (version.includes('*')) {
+    debug('cannot clean version "%s" with *', version)
+    return null
+  }
+
+  return version.replace(/\~/g, '').replace(/\^/g, '')
+}
+
+/**
  * Updates the given badge (if found) with new version information
  * read from the "package.json" file. Returns a promise
  */
@@ -116,6 +130,15 @@ function updateBadge({ name, from }) {
       debug(message)
       return Promise.reject(new Error(message))
     }
+
+    const cleanedVersion = cleanVersion(currentVersion)
+    if (!cleanedVersion) {
+      const message = `Could not clean version "${currentVersion}" for ${name}`
+      debug(message)
+      return Promise.reject(new Error(message))
+    }
+    currentVersion = cleanedVersion
+
     debug('current dependency version %s@%s', name, currentVersion)
 
     const readmeFilename = path.join(process.cwd(), 'README.md')
@@ -141,4 +164,5 @@ module.exports = {
   updateBadge,
   replaceVersionShield,
   parseGitHubRepo,
+  cleanVersion,
 }

@@ -30,7 +30,7 @@ You can pass multiple names at once
 npx update-badge prettier debug ...
 ```
 
-If a badge is not found, a new badge will be inserted on the first line of the README file
+If a badge is not found, a new badge will be inserted on the first line of the README file. If the version contains special characters like `~` or `^`, they will be removed. If the version is `*`, then this tool will fail and exit with non-zero exit code.
 
 ## Examples
 

@@ -11,7 +11,8 @@
   ],
   "scripts": {
     "test": "ava",
-    "semantic-release": "semantic-release"
+    "semantic-release": "semantic-release",
+    "demo": "DEBUG=dependency-version-badge ./bin/update-badge.js prettier debug"
   },
   "repository": {
     "type": "git",

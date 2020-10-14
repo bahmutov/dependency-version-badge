@@ -27,8 +27,7 @@ jobs:
         uses: bahmutov/npm-install@v1
 
       - name: Update version badges 🏷
-        run: |
-          DEBUG=dependency-version-badge ./bin/update-badge.js prettier debug
+        run: npm run demo
 
       # update the version of dependency-version-badge dependency
       # currently used by bahmutov/cy-rollup and bahmutov/cypress-svelte-unit-test
