@@ -12,7 +12,8 @@
   "scripts": {
     "test": "ava",
     "semantic-release": "semantic-release",
-    "demo": "DEBUG=dependency-version-badge ./bin/update-badge.js prettier debug"
+    "demo": "DEBUG=dependency-version-badge ./bin/update-badge.js prettier debug",
+    "demo:short": "DEBUG=dependency-version-badge ./bin/update-badge.js dependency-version-badge --short --from bahmutov/cy-rollup"
   },
   "repository": {
     "type": "git",

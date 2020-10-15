@@ -8,6 +8,7 @@ const { updateBadge } = require('../src/utils')
 
 const args = arg({
   '--from': String,
+  '--short': Boolean,
 })
 debug('args: %o', args)
 
