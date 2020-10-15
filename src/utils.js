@@ -14,20 +14,47 @@ function escapeName(name) {
  * Replaces the whole Markdown image badge with new version badge.
  * The badge is formed like "![name version](url...escaped name-version)"
  */
-function replaceVersionShield(readmeText, name, newVersion, usedIn) {
+function replaceVersionShield({ markdown, name, newVersion, usedIn, short }) {
+  if (!name) {
+    throw new Error('Missing the library name')
+  }
+  if (!newVersion) {
+    throw new Error('Missing the new version')
+  }
+
   const escapedName = escapeName(name)
-  const label = usedIn ? `${name} used in ${usedIn} version` : `${name} version`
-  const badgeVersionRe = new RegExp(
+  // if the user only wants the dependency version (without name)
+  // then the flag is set "short: true" and the text of the badge
+  // will end with "... short". For regular badges we search for
+  // badge text that ends with "... version"
+  const suffix = short ? 'short' : 'version'
+  const label = usedIn
+    ? `${name} used in ${usedIn} ${suffix}`
+    : `${name} ${suffix}`
+
+  const fullBadgeVersionRe = new RegExp(
     `\\!\\[${label}\\]` +
       '\\(https://img\\.shields\\.io/badge/' +
       escapedName +
       '-(\\d+\\.\\d+\\.\\d+)-brightgreen\\)',
   )
-  const badge = `![${label}](https://img.shields.io/badge/${escapedName}-${newVersion}-brightgreen)`
+
+  const shortBadgeVersionRe = new RegExp(
+    `\\!\\[${label}\\]` +
+      '\\(https://img\\.shields\\.io/badge/' +
+      '(\\d+\\.\\d+\\.\\d+)-brightgreen\\)',
+  )
+
+  const fullBadge = `![${label}](https://img.shields.io/badge/${escapedName}-${newVersion}-brightgreen)`
+  const shortBadge = `![${label}](https://img.shields.io/badge/${newVersion}-brightgreen)`
+
+  const badgeVersionRe = short ? shortBadgeVersionRe : fullBadgeVersionRe
+  const badge = short ? shortBadge : fullBadge
+
   debug('new badge contents "%s"', badge)
   let found
 
-  let updatedReadmeText = readmeText.replace(badgeVersionRe, (match) => {
+  let updatedReadmeText = markdown.replace(badgeVersionRe, (match) => {
     found = true
     return badge
   })
@@ -37,10 +64,10 @@ function replaceVersionShield(readmeText, name, newVersion, usedIn) {
     console.log('Insert new badge on the first line')
     debug('inserting new badge: %s', badge)
 
-    const lines = readmeText.split(os.EOL)
+    const lines = markdown.split(os.EOL)
     if (lines.length < 1) {
       console.error('README file has no lines, cannot insert version badge')
-      return readmeText
+      return markdown
     }
     lines[0] += ' ' + badge
     updatedReadmeText = lines.join(os.EOL)
@@ -116,8 +143,8 @@ function cleanVersion(version) {
  * Updates the given badge (if found) with new version information
  * read from the "package.json" file. Returns a promise
  */
-function updateBadge({ name, from }) {
-  debug('updating badge %o', { name, from })
+function updateBadge({ name, from, short }) {
+  debug('updating badge %o', { name, from, short })
 
   if (from && !isGitHubRepoUrl(from)) {
     from = `https://github.com/${from}`
@@ -145,12 +172,13 @@ function updateBadge({ name, from }) {
     const readmeText = fs.readFileSync(readmeFilename, 'utf8')
     const usedIn = parseGitHubRepo(from)
 
-    const maybeChangedText = replaceVersionShield(
-      readmeText,
+    const maybeChangedText = replaceVersionShield({
+      markdown: readmeText,
       name,
-      currentVersion,
+      newVersion: currentVersion,
       usedIn,
-    )
+      short,
+    })
     if (maybeChangedText !== readmeText) {
       console.log('saving updated readme with %s@%s', name, currentVersion)
       fs.writeFileSync(readmeFilename, maybeChangedText, 'utf8')

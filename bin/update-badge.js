@@ -8,6 +8,7 @@ const { updateBadge } = require('../src/utils')
 
 const args = arg({
   '--from': String,
+  '--short': Boolean,
 })
 debug('args: %o', args)
 
@@ -20,7 +21,7 @@ if (names.length < 1) {
 }
 
 pEachSeries(names, (name) => {
-  return updateBadge({ name, from: args['--from'] })
+  return updateBadge({ name, from: args['--from'], short: args['--short'] })
 }).catch((err) => {
   console.error(err.message)
   process.exit(1)

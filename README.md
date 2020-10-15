@@ -78,6 +78,18 @@ on:
 
 See example in [cypress-react-unit-test](https://github.com/bahmutov/cypress-react-unit-test#external-examples)
 
+## Short badge
+
+You can update a "short" badge where only the version of the dependency is listed. Use `--short` flag:
+
+```shell
+npx update-badge dependency-version-badge --short --from bahmutov/cy-rollup
+```
+
+The badge is below
+
+![dependency-version-badge used in cy-rollup short](https://img.shields.io/badge/1.2.0-brightgreen)
+
 ## Debugging
 
 Run with environment variable `DEBUG=dependency-version-badge` to see verbose logs
