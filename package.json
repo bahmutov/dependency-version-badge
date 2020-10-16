@@ -40,6 +40,7 @@
     "debug": "4.1.1",
     "execa": "4.0.3",
     "get-package-json-from-github": "1.2.1",
-    "p-each-series": "2.1.0"
+    "p-each-series": "2.1.0",
+    "semver": "7.3.2"
   }
 }

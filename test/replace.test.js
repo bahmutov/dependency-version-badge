@@ -1,6 +1,60 @@
 const test = require('ava')
 const debug = require('debug')('test')
-const { replaceVersionShield, parseGitHubRepo } = require('../src/utils')
+const {
+  replaceVersionShield,
+  parseGitHubRepo,
+  getColorBehind,
+} = require('../src/utils')
+
+test('without latest version', (t) => {
+  const color = getColorBehind('1.2.3')
+  t.is(color, 'green')
+})
+
+test('compares same version', (t) => {
+  const color = getColorBehind('1.2.3', '1.2.3')
+  t.is(color, 'green')
+})
+
+test('ten patches behind', (t) => {
+  const color = getColorBehind('1.2.20', '1.2.30')
+  t.is(color, 'green')
+})
+
+test('one minor behind', (t) => {
+  const color = getColorBehind('1.1.20', '1.2.30')
+  t.is(color, 'green')
+})
+
+test('two minors behind', (t) => {
+  const color = getColorBehind('1.0.20', '1.2.30')
+  t.is(color, 'green')
+})
+
+test('three minors behind', (t) => {
+  const color = getColorBehind('1.0.20', '1.3.30')
+  t.is(color, 'yellow')
+})
+
+test('four minors behind', (t) => {
+  const color = getColorBehind('1.0.20', '1.4.30')
+  t.is(color, 'yellow')
+})
+
+test('one major behind', (t) => {
+  const color = getColorBehind('1.10.0', '2.4.0')
+  t.is(color, 'red')
+})
+
+test('three majors behind', (t) => {
+  const color = getColorBehind('1.10.0', '4.4.0')
+  t.is(color, 'red')
+})
+
+test('edge case: new version is above latest tag', (t) => {
+  const color = getColorBehind('5.99.99', '1.2.30')
+  t.is(color, 'green')
+})
 
 test('get name from github url', (t) => {
   const url = 'https://github.com/bahmutov/dependency-version-badge'

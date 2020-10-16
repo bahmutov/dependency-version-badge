@@ -4,6 +4,7 @@ const path = require('path')
 const fs = require('fs')
 const os = require('os')
 const execa = require('execa')
+const semver = require('semver')
 const getPackageFromGitHub = require('get-package-json-from-github')
 
 function escapeName(name) {
@@ -12,10 +13,61 @@ function escapeName(name) {
 }
 
 /**
+ * @returns {'green'|'yellow'|'red'} Badge color
+ */
+function getColorBehind(newVersion, latestVersion) {
+  const green = 'green'
+  const yellow = 'yellow'
+  const red = 'red'
+
+  if (!latestVersion) {
+    return green
+  }
+  if (newVersion === latestVersion) {
+    return green
+  }
+
+  // edge case - the new version is newer than the latest
+  if (semver.gt(newVersion, latestVersion)) {
+    return green
+  }
+
+  const parsedNewVersion = semver.parse(newVersion)
+  const parsedLatest = semver.parse(latestVersion)
+
+  const pNew = {
+    major: parsedNewVersion.major,
+    minor: parsedNewVersion.minor,
+  }
+  const pLatest = {
+    major: parsedLatest.major,
+    minor: parsedLatest.minor,
+  }
+  debug('new version %o latest %o', pNew, pLatest)
+
+  if (pNew.major === pLatest.major) {
+    if (pNew.minor >= pLatest.minor - 2) {
+      return green
+    } else {
+      return yellow
+    }
+  } else {
+    return red
+  }
+}
+
+/**
  * Replaces the whole Markdown image badge with new version badge.
  * The badge is formed like "![name version](url...escaped name-version)"
  */
-function replaceVersionShield({ markdown, name, newVersion, usedIn, short }) {
+function replaceVersionShield({
+  markdown,
+  name,
+  newVersion,
+  usedIn,
+  short,
+  latestVersion,
+}) {
   if (!name) {
     throw new Error('Missing the library name')
   }
@@ -144,7 +196,7 @@ function cleanVersion(version) {
  * Updates the given badge (if found) with new version information
  * read from the "package.json" file. Returns a promise
  */
-function updateBadge({ name, from, short }) {
+function updateBadge({ name, from, short, behind }) {
   debug('updating badge %o', { name, from, short })
 
   if (from && !isGitHubRepoUrl(from)) {
@@ -152,40 +204,47 @@ function updateBadge({ name, from, short }) {
     debug('set --from to "%s"', from)
   }
 
-  return findVersionFrom(name, from).then((currentVersion) => {
-    if (!currentVersion) {
-      const message = `Could not find dependency "${name}" among dependencies`
-      debug(message)
-      return Promise.reject(new Error(message))
-    }
+  const latestVersionPromise = behind
+    ? getLatestVersion(name)
+    : Promise.resolve(undefined)
 
-    const cleanedVersion = cleanVersion(currentVersion)
-    if (!cleanedVersion) {
-      const message = `Could not clean version "${currentVersion}" for ${name}`
-      debug(message)
-      return Promise.reject(new Error(message))
-    }
-    currentVersion = cleanedVersion
+  return latestVersionPromise.then((latestVersion) => {
+    return findVersionFrom(name, from).then((currentVersion) => {
+      if (!currentVersion) {
+        const message = `Could not find dependency "${name}" among dependencies`
+        debug(message)
+        return Promise.reject(new Error(message))
+      }
 
-    debug('current dependency version %s@%s', name, currentVersion)
+      const cleanedVersion = cleanVersion(currentVersion)
+      if (!cleanedVersion) {
+        const message = `Could not clean version "${currentVersion}" for ${name}`
+        debug(message)
+        return Promise.reject(new Error(message))
+      }
+      currentVersion = cleanedVersion
 
-    const readmeFilename = path.join(process.cwd(), 'README.md')
-    const readmeText = fs.readFileSync(readmeFilename, 'utf8')
-    const usedIn = parseGitHubRepo(from)
+      debug('current dependency version %s@%s', name, currentVersion)
 
-    const maybeChangedText = replaceVersionShield({
-      markdown: readmeText,
-      name,
-      newVersion: currentVersion,
-      usedIn,
-      short,
+      const readmeFilename = path.join(process.cwd(), 'README.md')
+      const readmeText = fs.readFileSync(readmeFilename, 'utf8')
+      const usedIn = parseGitHubRepo(from)
+
+      const maybeChangedText = replaceVersionShield({
+        markdown: readmeText,
+        name,
+        newVersion: currentVersion,
+        usedIn,
+        short,
+        latestVersion,
+      })
+      if (maybeChangedText !== readmeText) {
+        console.log('saving updated readme with %s@%s', name, currentVersion)
+        fs.writeFileSync(readmeFilename, maybeChangedText, 'utf8')
+      } else {
+        debug('no updates for dependency %s', name)
+      }
     })
-    if (maybeChangedText !== readmeText) {
-      console.log('saving updated readme with %s@%s', name, currentVersion)
-      fs.writeFileSync(readmeFilename, maybeChangedText, 'utf8')
-    } else {
-      debug('no updates for dependency %s', name)
-    }
   })
 }
 
@@ -210,7 +269,11 @@ function getLatestVersion(npmPackageName) {
       return new Error(npmPackageName)
     }
 
-    return latest.split(':')[1].trim()
+    const version = latest.split(':')[1].trim()
+    const cleaned = semver.clean(version)
+    debug('latest version %o', { version, cleaned })
+
+    return cleaned
   })
 }
 
@@ -220,4 +283,5 @@ module.exports = {
   parseGitHubRepo,
   cleanVersion,
   getLatestVersion,
+  getColorBehind,
 }
