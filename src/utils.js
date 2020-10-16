@@ -13,10 +13,10 @@ function escapeName(name) {
 }
 
 /**
- * @returns {'green'|'yellow'|'red'} Badge color
+ * @returns {'brightgreen'|'yellow'|'red'} Badge color
  */
 function getColorBehind(newVersion, latestVersion) {
-  const green = 'green'
+  const green = 'brightgreen'
   const yellow = 'yellow'
   const red = 'red'
 

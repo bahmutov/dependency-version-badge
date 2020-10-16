@@ -6,29 +6,31 @@ const {
   getColorBehind,
 } = require('../src/utils')
 
+const green = 'brightgreen'
+
 test('without latest version', (t) => {
   const color = getColorBehind('1.2.3')
-  t.is(color, 'green')
+  t.is(color, green)
 })
 
 test('compares same version', (t) => {
   const color = getColorBehind('1.2.3', '1.2.3')
-  t.is(color, 'green')
+  t.is(color, green)
 })
 
 test('ten patches behind', (t) => {
   const color = getColorBehind('1.2.20', '1.2.30')
-  t.is(color, 'green')
+  t.is(color, green)
 })
 
 test('one minor behind', (t) => {
   const color = getColorBehind('1.1.20', '1.2.30')
-  t.is(color, 'green')
+  t.is(color, green)
 })
 
 test('two minors behind', (t) => {
   const color = getColorBehind('1.0.20', '1.2.30')
-  t.is(color, 'green')
+  t.is(color, green)
 })
 
 test('three minors behind', (t) => {
@@ -53,7 +55,7 @@ test('three majors behind', (t) => {
 
 test('edge case: new version is above latest tag', (t) => {
   const color = getColorBehind('5.99.99', '1.2.30')
-  t.is(color, 'green')
+  t.is(color, green)
 })
 
 test('get name from github url', (t) => {
