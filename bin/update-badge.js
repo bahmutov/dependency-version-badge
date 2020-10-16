@@ -7,8 +7,9 @@ const pEachSeries = require('p-each-series')
 const { updateBadge } = require('../src/utils')
 
 const args = arg({
-  '--from': String,
-  '--short': Boolean,
+  '--from': String, // remote github repo to check
+  '--short': Boolean, // only put the version string into to the badge without dependency name
+  '--behind': Boolean, // color code dependencies behind latest
 })
 debug('args: %o', args)
 
@@ -21,7 +22,13 @@ if (names.length < 1) {
 }
 
 pEachSeries(names, (name) => {
-  return updateBadge({ name, from: args['--from'], short: args['--short'] })
+  const options = {
+    name,
+    from: args['--from'],
+    short: args['--short'],
+    behind: args['--behind'],
+  }
+  return updateBadge(options)
 }).catch((err) => {
   console.error(err.message)
   process.exit(1)

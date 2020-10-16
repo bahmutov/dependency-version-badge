@@ -90,6 +90,33 @@ The badge is below
 
 ![dependency-version-badge used in cy-rollup short](https://img.shields.io/badge/1.2.0-brightgreen)
 
+## Behind the latest version
+
+By default every badge is bright green. But you can look up the latest version of the dependency and color code the badge depending on how far the current version is behind the latest version. If the current version is the latest, or a couple of minor versions behind, the badge is green. If the current version is more than a couple of minor releases behind, but is still on the same major version, the badge is yellow. If the current version is 1 or more major versions behind, the badge is red.
+
+<!-- prettier-ignore-start -->
+Latest version | Current version | Badge
+--- | --- | ---
+2.3.0 | 2.2.0 | ![up-to-date badge](https://img.shields.io/badge/2.2.0-brightgreen)
+2.3.0 | 2.0.0 | ![a few minor versions behind badge](https://img.shields.io/badge/2.0.0-yellow)
+2.3.0 | 1.19.12 | ![major version behind badge](https://img.shields.io/badge/1.19.12-red)
+<!-- prettier-ignore-end -->
+
+To get a color-coded badge, use CLI flag `--behind`
+
+Example color-coded badges for `ava` and `execa` dependencies are below
+
+```shell
+$ npm run demo:behind
+```
+
+<!-- prettier-ignore-start -->
+Dependency Badge | Short badge
+--- | ---
+![ava version](https://img.shields.io/badge/ava-3.13.0-brightgreen) | ![ava short](https://img.shields.io/badge/3.13.0-brightgreen)
+![execa version](https://img.shields.io/badge/execa-4.0.3-brightgreen) | ![execa short](https://img.shields.io/badge/4.0.3-brightgreen)
+<!-- prettier-ignore-end -->
+
 ## Debugging
 
 Run with environment variable `DEBUG=dependency-version-badge` to see verbose logs

@@ -38,6 +38,11 @@ jobs:
           DEBUG=dependency-version-badge ./bin/update-badge.js \
             dependency-version-badge --from bahmutov/cypress-svelte-unit-test
 
+      # update color coded badges that show how far is the current version
+      # behind the latest published version of the dependency
+      - name: Update badges using --behind 🏷
+        run: npm run demo:behind
+
       # commit any changed files
       # https://github.com/mikeal/publish-to-github-action
       - name: Push any changes to repo 📤
