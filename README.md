@@ -61,7 +61,7 @@ Examples table
 <!-- prettier-ignore-start -->
 Badge | Example repo
 --- | ---
-![dependency-version-badge used in cypress-svelte-unit-test version](https://img.shields.io/badge/dependency--version--badge-1.6.0-brightgreen) | [cypress-svelte-unit-test](https://github.com/bahmutov/cypress-svelte-unit-test)
+![dependency-version-badge used in cypress-svelte-unit-test version](https://img.shields.io/badge/dependency--version--badge-1.7.0-brightgreen) | [cypress-svelte-unit-test](https://github.com/bahmutov/cypress-svelte-unit-test)
 ![dependency-version-badge used in cy-rollup version](https://img.shields.io/badge/dependency--version--badge-1.2.0-brightgreen) | [cy-rollup](https://github.com/bahmutov/cy-rollup)
 <!-- prettier-ignore-end -->
 
