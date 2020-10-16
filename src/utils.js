@@ -3,6 +3,7 @@ const debug = require('debug')('dependency-version-badge')
 const path = require('path')
 const fs = require('fs')
 const os = require('os')
+const execa = require('execa')
 const getPackageFromGitHub = require('get-package-json-from-github')
 
 function escapeName(name) {
@@ -188,9 +189,35 @@ function updateBadge({ name, from, short }) {
   })
 }
 
+/**
+ * @param {string} npmPackageName
+ */
+function getLatestVersion(npmPackageName) {
+  return execa('npm', ['dist-tag', 'ls', npmPackageName]).then((result) => {
+    if (result.failed) {
+      console.error(result.stdout)
+      console.error(result.stderr)
+      return new Error(
+        `Could not fetch latest version for package ${npmPackageName}`,
+      )
+    }
+    const lines = result.stdout.split(os.EOL)
+    const latest = lines.find((line) => line.startsWith('latest'))
+    if (!latest) {
+      const message = `Cannot find latest tag for ${npmPackageName}`
+      console.error(message)
+      console.error(result.stdout)
+      return new Error(npmPackageName)
+    }
+
+    return latest.split(':')[1].trim()
+  })
+}
+
 module.exports = {
   updateBadge,
   replaceVersionShield,
   parseGitHubRepo,
   cleanVersion,
+  getLatestVersion,
 }
