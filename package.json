@@ -13,7 +13,8 @@
     "test": "ava",
     "semantic-release": "semantic-release",
     "demo": "DEBUG=dependency-version-badge ./bin/update-badge.js prettier debug",
-    "demo:short": "DEBUG=dependency-version-badge ./bin/update-badge.js dependency-version-badge --short --from bahmutov/cy-rollup"
+    "demo:short": "DEBUG=dependency-version-badge ./bin/update-badge.js dependency-version-badge --short --from bahmutov/cy-rollup",
+    "demo:behind": "DEBUG=dependency-version-badge ./bin/update-badge.js ava execa --behind && DEBUG=dependency-version-badge ./bin/update-badge.js ava execa --behind --short"
   },
   "repository": {
     "type": "git",

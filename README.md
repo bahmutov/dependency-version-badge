@@ -104,6 +104,19 @@ Latest version | Current version | Badge
 
 To get a color-coded badge, use CLI flag `--behind`
 
+Example color-coded badges for `ava` and `execa` dependencies are below
+
+```shell
+$ npm run demo:behind
+```
+
+<!-- prettier-ignore-start -->
+Dependency Badge | Short badge
+--- | ---
+![ava version](https://img.shields.io/badge/ava-3.13.0-brightgreen) | ![ava short](https://img.shields.io/badge/3.13.0-brightgreen)
+![execa version](https://img.shields.io/badge/execa-4.0.3-brightgreen) | ![execa short](https://img.shields.io/badge/4.0.3-brightgreen)
+<!-- prettier-ignore-end -->
+
 ## Debugging
 
 Run with environment variable `DEBUG=dependency-version-badge` to see verbose logs
