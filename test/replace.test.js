@@ -58,6 +58,11 @@ test('edge case: new version is above latest tag', (t) => {
   t.is(color, green)
 })
 
+test('2.0.0 behind 2.3.0 color', (t) => {
+  const color = getColorBehind('2.0.0', '2.3.0')
+  t.is(color, 'yellow')
+})
+
 test('get name from github url', (t) => {
   const url = 'https://github.com/bahmutov/dependency-version-badge'
   const name = parseGitHubRepo(url)
