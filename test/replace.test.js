@@ -87,6 +87,77 @@ test('replacing dependency badge', (t) => {
   t.is(replaced, expected)
 })
 
+test('replacing yellow dependency badge with green', (t) => {
+  const markdown = `
+    this is readme markdown
+
+    ![X version](https://img.shields.io/badge/X-1.2.3-yellow)
+
+    some other text
+  `
+  const replaced = replaceVersionShield({
+    markdown,
+    name: 'X',
+    newVersion: '4.5.6',
+  })
+  const expected = `
+    this is readme markdown
+
+    ![X version](https://img.shields.io/badge/X-4.5.6-brightgreen)
+
+    some other text
+  `
+  t.is(replaced, expected)
+})
+
+test('replacing yellow dependency badge with yellow', (t) => {
+  const markdown = `
+    this is readme markdown
+
+    ![X version](https://img.shields.io/badge/X-1.2.3-yellow)
+
+    some other text
+  `
+  const replaced = replaceVersionShield({
+    markdown,
+    name: 'X',
+    newVersion: '4.5.6',
+    latestVersion: '4.8.0',
+  })
+  const expected = `
+    this is readme markdown
+
+    ![X version](https://img.shields.io/badge/X-4.5.6-yellow)
+
+    some other text
+  `
+  t.is(replaced, expected)
+})
+
+test('replacing green dependency badge with red', (t) => {
+  const markdown = `
+    this is readme markdown
+
+    ![X version](https://img.shields.io/badge/X-1.2.3-brightgreen)
+
+    some other text
+  `
+  const replaced = replaceVersionShield({
+    markdown,
+    name: 'X',
+    newVersion: '4.5.6', // major version behind the latest!
+    latestVersion: '5.0.0',
+  })
+  const expected = `
+    this is readme markdown
+
+    ![X version](https://img.shields.io/badge/X-4.5.6-red)
+
+    some other text
+  `
+  t.is(replaced, expected)
+})
+
 test('replacing dependency badge for longer name', (t) => {
   const markdown = `
     this is readme markdown
@@ -153,6 +224,31 @@ test('replacing short badge', (t) => {
     this is readme markdown
 
     ![library-name short](https://img.shields.io/badge/4.5.6-brightgreen)
+
+    some other text
+  `
+  t.is(replaced, expected)
+})
+
+test('replacing green dependency badge with red (short)', (t) => {
+  const markdown = `
+    this is readme markdown
+
+    ![X short](https://img.shields.io/badge/1.2.3-brightgreen)
+
+    some other text
+  `
+  const replaced = replaceVersionShield({
+    markdown,
+    name: 'X',
+    newVersion: '4.5.6', // major version behind the latest!
+    latestVersion: '5.0.0',
+    short: true,
+  })
+  const expected = `
+    this is readme markdown
+
+    ![X short](https://img.shields.io/badge/4.5.6-red)
 
     some other text
   `

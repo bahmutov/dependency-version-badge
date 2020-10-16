@@ -85,21 +85,29 @@ function replaceVersionShield({
     ? `${name} used in ${usedIn} ${suffix}`
     : `${name} ${suffix}`
 
+  const badgeColor = getColorBehind(newVersion, latestVersion)
+  debug(
+    'badge color from %s to %s is %s',
+    newVersion,
+    latestVersion,
+    badgeColor,
+  )
+
   const fullBadgeVersionRe = new RegExp(
     `\\!\\[${label}\\]` +
       '\\(https://img\\.shields\\.io/badge/' +
       escapedName +
-      '-(\\d+\\.\\d+\\.\\d+)-brightgreen\\)',
+      '-(\\d+\\.\\d+\\.\\d+)-(?:brightgreen|yellow|red)\\)',
   )
 
   const shortBadgeVersionRe = new RegExp(
     `\\!\\[${label}\\]` +
       '\\(https://img\\.shields\\.io/badge/' +
-      '(\\d+\\.\\d+\\.\\d+)-brightgreen\\)',
+      '(\\d+\\.\\d+\\.\\d+)-(?:brightgreen|yellow|red)\\)',
   )
 
-  const fullBadge = `![${label}](https://img.shields.io/badge/${escapedName}-${newVersion}-brightgreen)`
-  const shortBadge = `![${label}](https://img.shields.io/badge/${newVersion}-brightgreen)`
+  const fullBadge = `![${label}](https://img.shields.io/badge/${escapedName}-${newVersion}-${badgeColor})`
+  const shortBadge = `![${label}](https://img.shields.io/badge/${newVersion}-${badgeColor})`
 
   const badgeVersionRe = short ? shortBadgeVersionRe : fullBadgeVersionRe
   const badge = short ? shortBadge : fullBadge
