@@ -157,9 +157,6 @@ function findVersionFromPackageFile(name) {
   return currentVersion
 }
 
-/**
- *
- */
 function findVersionFromGitHub(name, repoUrl) {
   return getPackageFromGitHub(repoUrl).then((pkg) => {
     return getAnyDependency(pkg, name)
@@ -296,6 +293,24 @@ function getLatestVersion(npmPackageName) {
   })
 }
 
+/**
+ * Splits each give string using comma separator and flattens the result
+ * @param {string[]} strings
+ * @returns {string[]}
+ */
+function splitCommas(strings) {
+  if (!Array.isArray(strings)) {
+    throw new Error('expected list of strings')
+  }
+
+  const splitComma = (s) => s.split(',')
+
+  // split and flatten the array
+  return strings.map(splitComma).reduce((list, arr) => {
+    return list.concat(arr)
+  }, [])
+}
+
 module.exports = {
   updateBadge,
   replaceVersionShield,
@@ -303,4 +318,5 @@ module.exports = {
   cleanVersion,
   getLatestVersion,
   getColorBehind,
+  splitCommas,
 }

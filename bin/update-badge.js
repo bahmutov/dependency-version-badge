@@ -4,7 +4,7 @@
 const arg = require('arg')
 const debug = require('debug')('dependency-version-badge')
 const pEachSeries = require('p-each-series')
-const { updateBadge } = require('../src/utils')
+const { updateBadge, splitCommas } = require('../src/utils')
 
 const args = arg({
   '--from': [String], // remote github repo(s) to check
@@ -21,7 +21,7 @@ if (names.length < 1) {
   process.exit(1)
 }
 
-const froms = args['--from'] || []
+const froms = splitCommas(args['--from'] || [])
 if (names.length > 1 && froms.length > 1) {
   console.error(
     'Cannot combine multiple dependency names with multiple --from parameters',
