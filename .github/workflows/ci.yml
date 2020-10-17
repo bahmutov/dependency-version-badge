@@ -16,6 +16,18 @@ jobs:
       - name: Run update 📊
         run: bin/update-badge.js prettier
 
+      - name: Update badges demo 🏷
+        run: npm run demo
+
+      - name: Short badges demo 🏷
+        run: npm run demo:short
+
+      - name: Behind latest version badges demo 🏷
+        run: npm run demo:behind
+
+      - name: Multiple --from demo 🏷
+        run: npm run demo:from
+
       - name: Semantic Release 🚀
         uses: cycjimmy/semantic-release-action@v2
         env:

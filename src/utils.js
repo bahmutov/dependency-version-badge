@@ -86,12 +86,16 @@ function replaceVersionShield({
     : `${name} ${suffix}`
 
   const badgeColor = getColorBehind(newVersion, latestVersion)
-  debug(
-    'badge color from %s to %s is %s',
-    newVersion,
-    latestVersion,
-    badgeColor,
-  )
+  if (latestVersion) {
+    debug(
+      'badge color from %s to %s is %s',
+      newVersion,
+      latestVersion,
+      badgeColor,
+    )
+  } else {
+    debug('new version %s has badge color %s', newVersion, badgeColor)
+  }
 
   const fullBadgeVersionRe = new RegExp(
     `\\!\\[${label}\\]` +
@@ -207,9 +211,16 @@ function cleanVersion(version) {
 function updateBadge({ name, from, short, behind }) {
   debug('updating badge %o', { name, from, short })
 
-  if (from && !isGitHubRepoUrl(from)) {
-    from = `https://github.com/${from}`
-    debug('set --from to "%s"', from)
+  if (from) {
+    if (typeof from !== 'string') {
+      debug('from parameter is %o', { from })
+      throw new Error('--from parameter should be a string')
+    }
+
+    if (!isGitHubRepoUrl(from)) {
+      from = `https://github.com/${from}`
+      debug('set --from to "%s"', from)
+    }
   }
 
   const latestVersionPromise = behind
