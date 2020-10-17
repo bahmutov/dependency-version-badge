@@ -207,9 +207,16 @@ function cleanVersion(version) {
 function updateBadge({ name, from, short, behind }) {
   debug('updating badge %o', { name, from, short })
 
-  if (from && !isGitHubRepoUrl(from)) {
-    from = `https://github.com/${from}`
-    debug('set --from to "%s"', from)
+  if (from) {
+    if (typeof from !== 'string') {
+      debug('from parameter is %o', { from })
+      throw new Error('--from parameter should be a string')
+    }
+
+    if (!isGitHubRepoUrl(from)) {
+      from = `https://github.com/${from}`
+      debug('set --from to "%s"', from)
+    }
   }
 
   const latestVersionPromise = behind

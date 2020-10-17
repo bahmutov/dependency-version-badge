@@ -50,3 +50,15 @@ test('multiple --from', (t) => {
     _: ['a', 'b'],
   })
 })
+
+test('multiple --from comma-separated', (t) => {
+  const parsed = arg(argOptions, {
+    argv: ['--from', 'foo,bar', 'a', 'b'],
+  })
+  debug('parsed %o', parsed)
+  // arg parses them as a single string
+  t.deepEqual(parsed, {
+    '--from': ['foo,bar'],
+    _: ['a', 'b'],
+  })
+})

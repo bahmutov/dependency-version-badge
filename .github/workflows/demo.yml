@@ -43,6 +43,11 @@ jobs:
       - name: Update badges using --behind 🏷
         run: npm run demo:behind
 
+      # update version used in multiple github repos in a single command
+      # that uses multiple "--from" parameters
+      - name: Update multiple --from repos 🏷
+        run: npm run demo:from
+
       # commit any changed files
       # https://github.com/mikeal/publish-to-github-action
       - name: Push any changes to repo 📤
