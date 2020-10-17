@@ -4,6 +4,8 @@
 const arg = require('arg')
 const debug = require('debug')('dependency-version-badge')
 const pEachSeries = require('p-each-series')
+const path = require('path')
+const pkg = require(path.join(__dirname, '..', 'package.json'))
 const { updateBadge, splitCommas } = require('../src/utils')
 
 const args = arg({
@@ -11,6 +13,7 @@ const args = arg({
   '--short': Boolean, // only put the version string into to the badge without dependency name
   '--behind': Boolean, // color code dependencies behind latest
 })
+debug('%s %s', pkg.name, pkg.version)
 debug('args: %o', args)
 
 const names = args._
