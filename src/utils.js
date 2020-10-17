@@ -86,12 +86,16 @@ function replaceVersionShield({
     : `${name} ${suffix}`
 
   const badgeColor = getColorBehind(newVersion, latestVersion)
-  debug(
-    'badge color from %s to %s is %s',
-    newVersion,
-    latestVersion,
-    badgeColor,
-  )
+  if (latestVersion) {
+    debug(
+      'badge color from %s to %s is %s',
+      newVersion,
+      latestVersion,
+      badgeColor,
+    )
+  } else {
+    debug('new version %s has badge color %s', newVersion, badgeColor)
+  }
 
   const fullBadgeVersionRe = new RegExp(
     `\\!\\[${label}\\]` +
