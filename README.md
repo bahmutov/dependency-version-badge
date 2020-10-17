@@ -56,6 +56,18 @@ For GitHub urls, you can simply use `--from <organization name>/<repo name>` lik
 npx update-badge dependency-version-badge --from bahmutov/cypress-svelte-unit-test
 ```
 
+You can pass a single dependency name and multiple `--from` parameters
+
+```
+npx update-badge X --from bahmutov/repo1 --from bahmutov/repo2 --from bahmutov/repo3
+```
+
+You can shorten multiple `--from` parameters using commas without spaces
+
+```
+npx update-badge X --from bahmutov/repo1,bahmutov/repo2,bahmutov/repo3
+```
+
 Examples table
 
 <!-- prettier-ignore-start -->

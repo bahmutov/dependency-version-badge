@@ -28,6 +28,9 @@ jobs:
       - name: Multiple --from demo 🏷
         run: npm run demo:from
 
+      - name: Multiple --from comma-separated demo 🏷
+        run: npm run demo:from-comma
+
       - name: Semantic Release 🚀
         uses: cycjimmy/semantic-release-action@v2
         env:
