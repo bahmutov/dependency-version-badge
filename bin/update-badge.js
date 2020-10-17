@@ -21,28 +21,43 @@ if (names.length < 1) {
   process.exit(1)
 }
 
-const from = args['--from'] || []
-if (names.length > 1 && from.length > 1) {
+const froms = args['--from'] || []
+if (names.length > 1 && froms.length > 1) {
   console.error(
     'Cannot combine multiple dependency names with multiple --from parameters',
   )
   process.exit(1)
 }
 
-if (from.length > 1) {
-  debug('updating dependency "%s" from repos %o', names[0], from)
+const onError = (err) => {
+  console.error(err.message)
+  process.exit(1)
+}
+
+const short = args['--short']
+const behind = args['--behind']
+
+if (froms.length > 1) {
+  const name = names[0]
+  debug('updating dependency "%s" from repos %o', name, froms)
+  pEachSeries(froms, (from) => {
+    const options = {
+      name,
+      from,
+      short,
+      behind,
+    }
+    return updateBadge(options)
+  }).catch(onError)
 } else {
   debug('updating names: %o', names)
   pEachSeries(names, (name) => {
     const options = {
       name,
-      from: from[0],
-      short: args['--short'],
-      behind: args['--behind'],
+      from: froms[0],
+      short,
+      behind,
     }
     return updateBadge(options)
-  }).catch((err) => {
-    console.error(err.message)
-    process.exit(1)
-  })
+  }).catch(onError)
 }
