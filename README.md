@@ -126,7 +126,7 @@ $ npm run demo:behind
 Dependency Badge | Short badge
 --- | ---
 ![ava version](https://img.shields.io/badge/ava-3.13.0-brightgreen) | ![ava short](https://img.shields.io/badge/3.13.0-brightgreen)
-![execa version](https://img.shields.io/badge/execa-4.0.3-brightgreen) | ![execa short](https://img.shields.io/badge/4.0.3-brightgreen)
+![execa version](https://img.shields.io/badge/execa-4.0.3-red) | ![execa short](https://img.shields.io/badge/4.0.3-red)
 <!-- prettier-ignore-end -->
 
 ## Debugging
