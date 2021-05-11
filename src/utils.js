@@ -145,6 +145,7 @@ function getAnyDependency(pkg, name) {
     {},
     pkg.dependencies,
     pkg.devDependencies,
+    pkg.optionalDependencies,
   )
   return allDependencies[name]
 }
@@ -319,4 +320,5 @@ module.exports = {
   getLatestVersion,
   getColorBehind,
   splitCommas,
+  getAnyDependency,
 }
