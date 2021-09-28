@@ -68,6 +68,12 @@ You can shorten multiple `--from` parameters using commas without spaces
 npx update-badge X --from bahmutov/repo1,bahmutov/repo2,bahmutov/repo3
 ```
 
+You can use custom file instead README.md using `--file` parameter
+
+```
+npx update-badge --file ./folder1/folder2/info.md
+```
+
 Examples table
 
 <!-- prettier-ignore-start -->

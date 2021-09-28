@@ -206,7 +206,7 @@ function cleanVersion(version) {
  * Updates the given badge (if found) with new version information
  * read from the "package.json" file. Returns a promise
  */
-function updateBadge({ name, from, short, behind }) {
+function updateBadge({ name, from, short, behind, file }) {
   debug('updating badge %o', { name, from, short })
 
   if (from) {
@@ -243,8 +243,7 @@ function updateBadge({ name, from, short, behind }) {
 
       debug('current dependency version %s@%s', name, currentVersion)
 
-      const readmeFilename = path.join(process.cwd(), 'README.md')
-      const readmeText = fs.readFileSync(readmeFilename, 'utf8')
+      const readmeText = fs.readFileSync(file, 'utf8')
       const usedIn = parseGitHubRepo(from)
 
       const maybeChangedText = replaceVersionShield({
@@ -257,7 +256,7 @@ function updateBadge({ name, from, short, behind }) {
       })
       if (maybeChangedText !== readmeText) {
         console.log('saving updated readme with %s@%s', name, currentVersion)
-        fs.writeFileSync(readmeFilename, maybeChangedText, 'utf8')
+        fs.writeFileSync(file, maybeChangedText, 'utf8')
       } else {
         debug('no updates for dependency %s', name)
       }

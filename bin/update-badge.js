@@ -8,10 +8,13 @@ const path = require('path')
 const pkg = require(path.join(__dirname, '..', 'package.json'))
 const { updateBadge, splitCommas } = require('../src/utils')
 
+const defaultFile = path.join(process.cwd(), 'README.md');
+
 const args = arg({
   '--from': [String], // remote github repo(s) to check
   '--short': Boolean, // only put the version string into to the badge without dependency name
   '--behind': Boolean, // color code dependencies behind latest
+  '--file': String,
 })
 debug('%s %s', pkg.name, pkg.version)
 debug('args: %o', args)
@@ -39,6 +42,7 @@ const onError = (err) => {
 
 const short = args['--short']
 const behind = args['--behind']
+const file = args['--file'] || defaultFile
 
 if (froms.length > 1) {
   const name = names[0]
@@ -49,6 +53,7 @@ if (froms.length > 1) {
       from,
       short,
       behind,
+      file,
     }
     return updateBadge(options)
   }).catch(onError)
@@ -60,6 +65,7 @@ if (froms.length > 1) {
       from: froms[0],
       short,
       behind,
+      file
     }
     return updateBadge(options)
   }).catch(onError)
