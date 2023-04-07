@@ -79,7 +79,7 @@ Examples table
 <!-- prettier-ignore-start -->
 Badge | Example repo
 --- | ---
-![dependency-version-badge used in cypress-svelte-unit-test version](https://img.shields.io/badge/dependency--version--badge-1.9.1-brightgreen) | [cypress-svelte-unit-test](https://github.com/bahmutov/cypress-svelte-unit-test)
+![dependency-version-badge used in cypress-svelte-unit-test version](https://img.shields.io/badge/dependency--version--badge-1.11.0-brightgreen) | [cypress-svelte-unit-test](https://github.com/bahmutov/cypress-svelte-unit-test)
 ![dependency-version-badge used in cy-rollup version](https://img.shields.io/badge/dependency--version--badge-1.2.0-brightgreen) | [cy-rollup](https://github.com/bahmutov/cy-rollup)
 <!-- prettier-ignore-end -->
 
@@ -131,7 +131,7 @@ $ npm run demo:behind
 <!-- prettier-ignore-start -->
 Dependency Badge | Short badge
 --- | ---
-![ava version](https://img.shields.io/badge/ava-3.13.0-brightgreen) | ![ava short](https://img.shields.io/badge/3.13.0-brightgreen)
+![ava version](https://img.shields.io/badge/ava-3.13.0-red) | ![ava short](https://img.shields.io/badge/3.13.0-red)
 ![execa version](https://img.shields.io/badge/execa-4.0.3-red) | ![execa short](https://img.shields.io/badge/4.0.3-red)
 <!-- prettier-ignore-end -->
 
